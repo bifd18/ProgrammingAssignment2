@@ -4,18 +4,49 @@
 ## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  ## pass x as a square invertible matrix.
+  ## return: a list containing functions to
+  ## set the matrix
+  ## get the matrix
+  ## set the inverse
+  ## get the inverse
+  
+  minv = NULL
+  set = function(y) {
+    # `<<-` used to assign a value to an object in a different environment
+    x <<- y
+    minv <<- NULL
+  }
+  get = function() x
+  setminv = function(inverse) minv <<- inverse 
+  getminv = function() minv
+  list(set=set, get=get, setminv=setminv, getminv=getminv)
 }
-
-
-## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-        ## This is a test for sync local to GitHub
+  ## x is the output of makeCacheMatrix()
+  ## result of this function is the inverse of the original matrix input to makeCacheMatrix()
+  
+  cinv = x$getminv()
+  
+  # if the inverse has already been calculated
+  if (!is.null(minv)){
+    # get it from the cache and skips the computation. 
+    message("getting cached data")
+    return(minv)
+  }
+  
+  # otherwise, calculates the inverse 
+  mat.data = x$get()
+  minv = solve(mat.data, ...)
+  
+  # sets the value of the inverse in the cache via the setinv function.
+  x$setminv(minv)
+  
+  return(cinv)
 }
 
-makeVector <- function(x = numeric()) {
+makevector<- function(x = numeric()) {
   m <- NULL
   set <- function(y) {
     x <<- y
